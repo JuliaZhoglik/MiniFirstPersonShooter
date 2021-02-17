@@ -8,10 +8,26 @@ public class WanderingAI : MonoBehaviour {
 
 	public float speed = 3.0f; // скорость движения
 	public float obstacleRange = 5.0f; // расстояние до препятствия
-	
+    public const float baseSpeed = 3.0f; // базовая скорость
+
 	private bool _alive;
 
-	void Start ()
+    void Awake()
+    {
+        Messenger<float>.AddListener(GameEvent.SPEED_CHANGED, OnSpeedChanged);
+    }
+
+    void OnDestroy()
+    {
+        Messenger<float>.RemoveListener(GameEvent.SPEED_CHANGED, OnSpeedChanged);
+    }
+
+    private void OnSpeedChanged(float value)
+    {
+        speed = baseSpeed * value;
+    }
+
+    void Start ()
 	{
 		_alive = true;
         
